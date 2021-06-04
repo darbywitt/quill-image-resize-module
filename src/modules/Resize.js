@@ -71,6 +71,16 @@ export class Resize extends BaseModule {
     handleMouseup = () => {
         // reset cursor everywhere
         this.setCursor('');
+		// update img src with resized width
+		if (this.img.src && this.img.width) {
+			const url = new URL(this.img.src);
+			const updateUrl = `${url.origin}${url.pathname}?auto=format&w=${this.img.width}`;
+			this.img.src = updateUrl;
+			this.img.srcset=`
+			${url.origin}${url.pathname}?auto=format&w=${this.img.width}&dpr=1 1x,
+			${url.origin}${url.pathname}?auto=format&w=${this.img.width}&dpr=2 2x,
+			${url.origin}${url.pathname}?auto=format&w=${this.img.width}&dpr=3 3x,`
+		}
         // stop listening for movement and mouseup
         document.removeEventListener('mousemove', this.handleDrag);
         document.removeEventListener('mouseup', this.handleMouseup);
